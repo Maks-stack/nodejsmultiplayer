@@ -2,7 +2,7 @@
   "name": "nodejsmultiplayer",
   "version": "1.0.0",
   "description": "",
-  "main": "Boot.js",
+  "main": "Game.js",
   "dependencies": {
     "socket.io": "^1.4.8",
     "express": "^4.14.0"
