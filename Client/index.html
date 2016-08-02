@@ -4,10 +4,13 @@
        <Title>Phaser Game</Title>
        <script src="libs/phaser.min.js"></script>
        <script src="libs/rot.js"></script>
+       <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
    </HEAD>
    <BODY>
-       
+       MAX
        <script type = "text/javascript">
+           
+           var socket = io();
            /*
            window.onload = function(){
                var game = new Phaser.Game(800,600,Phaser.CANVAS,'');
