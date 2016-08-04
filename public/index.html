@@ -1,11 +1,42 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset ="utf-8"/>
-        <title>MAX BLA</title>
-    </head>
-    
-    <body>
-        <h1>MAXS node</h1>
-    </body>
-</html>
+<!DOCTYPE HTML>
+<HTML>
+   <HEAD>
+       <Title>Phaser Game</Title>
+       <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+   </HEAD>
+   <BODY>
+     fuck
+       <script type = "text/javascript">
+       var socket = io();
+
+       var random = Math.random();
+
+       var a = function(){
+
+       			socket.emit('bla', {
+       			msg:"BLABLA"
+       		});
+       }
+
+       socket.on('serverMsg', function(data){
+       		console.log(data.msg);
+       })
+           /*
+           window.onload = function(){
+               var game = new Phaser.Game(800,600,Phaser.CANVAS,'');
+               
+               game.state.add('Boot',Game.Boot);
+               game.state.add('Preloader',Game.Preloader);
+               game.state.add('MainMenu',Game.MainMenu);
+               game.state.add('Level1',Game.Level1);
+               
+               game.state.start('Boot');
+           }
+           */
+       
+       </script>
+
+       <button onclick = 'a'> Test</button>
+
+   </BODY>
+</HTML>
