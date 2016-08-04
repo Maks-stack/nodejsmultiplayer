@@ -1,7 +1,7 @@
 var express = require('express');
 var favicon = require('serve-favicon');
 var app = express();
-var PORT = process.env.PORT || 2000;
+var PORT = process.env.PORT || 5000;
 
 var middleware = {
   
@@ -25,5 +25,5 @@ console.log(__dirname);
 app.use(express.static(__dirname + '/public'));
 
 app.listen(PORT, function(){
-    console.log("server started on port: " + app.get('port'));
+    console.log("server started on port: " + PORT);
 });
