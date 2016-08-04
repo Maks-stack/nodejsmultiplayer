@@ -19,7 +19,7 @@ app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 app.use(middleware.logger);
 app.get('/', function (req, res){
-    res.send('HelloWorld!');
+    res.send('Hello World!');
 })
 
 
