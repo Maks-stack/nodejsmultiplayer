@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
-var port = process.env.PORT || 2000;
+var port = process.env.PORT;
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
