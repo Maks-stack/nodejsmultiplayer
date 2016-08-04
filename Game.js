@@ -2,7 +2,7 @@
 var http = require('http');
 
 //Lets define a port we want to listen to
-const PORT= process.Env.PORT || 200; 
+const PORT= process.env.PORT || 200; 
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
