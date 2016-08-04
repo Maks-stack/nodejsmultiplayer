@@ -1,11 +1,12 @@
 var express = require("express");
 var app = express();
 
-app.get('/', function(req, res){
-    
-    res.send('Hello Express!');
-});
+app.use(express.static(__dirname + '/public'));
 
 var port = process.env.PORT || 2000;
 
-app.listen(port);
+console.log(__dirname);
+
+app.listen(port, function(){
+    console.log("server started on port: " + port);
+});
