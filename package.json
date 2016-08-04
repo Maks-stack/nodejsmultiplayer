@@ -1,19 +1,15 @@
 {
   "name": "nodejsmultiplayer",
   "version": "1.0.0",
-  "description": "",
   "main": "game.js",
-  "scripts":{
-    "start": "node game.js"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "express": "^4.14.0",
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Maksmaksmakz/nodejsmultiplayer.git"
@@ -23,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/Maksmaksmakz/nodejsmultiplayer/issues"
   },
-  "homepage": "https://github.com/Maksmaksmakz/nodejsmultiplayer#readme"
+  "homepage": "https://github.com/Maksmaksmakz/nodejsmultiplayer#readme",
+  "description": ""
 }
