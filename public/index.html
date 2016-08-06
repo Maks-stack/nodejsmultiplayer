@@ -10,7 +10,7 @@
 
        <script type = "text/javascript">
         var ctx = document.getElementById("ctx").getContext("2d");
-         ctx.font = '30px Arial'; 
+         ctx.font = '5px Arial'; 
 
          var socket = io();
 
@@ -18,7 +18,10 @@
          		ctx.clearRect(0,0,500,500);
             for(var i = 0; i < data.length; i++)
             {
-                ctx.fillText(data[i].number, data[i].x, data[i].y);
+                console.log(data[i].color);
+                ctx.fillStyle= data[i].color;
+                ctx.fillRect(data[i].x ,data[i].y, 10,10);
+                //ctx.fillText(data[i].number, data[i].x, data[i].y);
             }
          });
 

@@ -18,11 +18,18 @@ server.listen(PORT, function(){
 var SOCKET_LIST = {};
 var PLAYER_LIST = {};
 
+var PLAYER_COLORS = [
+	RED = "#FF0000",
+	CYAN = "#00fff9",
+	YELLOW = "#fff400",
+	GREEN = "#00ff38"];
+
 var Player = function(id){
 	var self = {
 		x:250,
 		y:250,
 		id:id,
+		color: "",
 		number : "" + Math.floor(10 * Math.random()),
 		pressingRight: false,
 		pressingLeft: false,
@@ -72,14 +79,17 @@ io.sockets.on('connection', function(socket){
 
 setInterval(function(){
 	var pack = [];
+	var index= 0;
     for(var i in PLAYER_LIST){
     	var player = PLAYER_LIST[i];
     	player.updatePosition();
     	pack.push({
     		x:player.x,
     		y:player.y,
-    		number: player.number
+    		number: player.number,
+    		color : PLAYER_COLORS[index]
     	});
+    	index++;
     }
     for(var i in SOCKET_LIST){
     	var socket = SOCKET_LIST[i];
