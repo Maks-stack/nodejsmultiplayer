@@ -24,6 +24,9 @@ var PLAYER_COLORS = [
 	YELLOW = "#fff400",
 	GREEN = "#00ff38"];
 
+var FRICTION = 0.92;
+var MAXSPEED = 10;
+
 var Player = function(id){
 	var self = {
 		x:250,
@@ -35,17 +38,34 @@ var Player = function(id){
 		pressingLeft: false,
 		pressingUp: false,
 		pressingDown: false,
-		maxSpd: 10,
+		velX: 0,
+		velY: 0
 	}
 	self.updatePosition = function(){
 		if(self.pressingRight)
-			self.x += self.maxSpd;
+			self.velX++;
 		if(self.pressingLeft)
-			self.x -= self.maxSpd;
+			self.velX --;
 		if(self.pressingUp)
-			self.y -= self.maxSpd;
+			self.velY --;
 		if(self.pressingDown)
-			self.y += self.maxSpd;
+			self.velY ++;
+
+		if(self.velX > MAXSPEED)
+			self.velX = MAXSPEED;
+		if(self.velX < -MAXSPEED)
+			self.velX = -MAXSPEED;
+
+		if(self.velY > MAXSPEED)
+			self.velY = MAXSPEED;
+		if(self.velY < -MAXSPEED)
+			self.velY = -MAXSPEED;
+
+		self.velX *= FRICTION;
+		self.velY *= FRICTION;
+
+		self.x += self.velX;
+		self.y += self.velY;
 	}
 	return self;
 } 
@@ -93,7 +113,9 @@ setInterval(function(){
     		x:player.x,
     		y:player.y,
     		number: player.number,
-    		color : PLAYER_COLORS[index]
+    		color : PLAYER_COLORS[index],
+    		velX:player.velX,
+    		velY:player.velY
     	});
     	index++;
     }

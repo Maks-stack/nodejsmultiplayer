@@ -7,12 +7,13 @@
    </HEAD>
    <BODY>
       <div class = "container-fluid text-center">
+      <div id = "debug">DEBUG</div>
+
         <canvas id = "ctx" width = "500" height = "500" style = "border: 1px solid#000000"></canvas>
-        
-        <div id = "chat-text" style = "display:inline-block;text-align:left; width: 500px;height:100px;overflow-y:scroll">
+        <div id = "chat-text" style = "display:block;text-align:left; width: 500px;height:100px;overflow-y:scroll">
             <div>CHAT</div>
         </div>
-                <div class = "chat">
+        <div class = "chat">
             <form id = "chat-form">
               <input id = "chat-input" type = "text" style = "width:500px"></input>
             </form>
@@ -23,6 +24,7 @@
         var chatText = document.getElementById('chat-text');
         var chatInput = document.getElementById('chat-input');
         var chatForm = document.getElementById('chat-form');
+        var debug = document.getElementById('debug');
 
         var ctx = document.getElementById("ctx").getContext("2d");
          ctx.font = '5px Arial'; 
@@ -35,6 +37,7 @@
             {
                 ctx.fillStyle= data[i].color;
                 ctx.fillRect(data[i].x ,data[i].y, 10,10);
+                debug.innerHTML = i;
             }
          });
 
