@@ -3,12 +3,28 @@
    <HEAD>
        <Title>Phaser Game</Title>
        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+       <link rel="stylesheet" type="text/css" href="public/style.css" />
+       <link rel="stylesheet" type="text/css" href="public/bootstrap/dist/css/bootstrap.min.css" />
    </HEAD>
    <BODY>
-
-      <canvas id = "ctx" width = "500" height = "500" style = "border: 1px solid#000000"></canvas>
+      <div class = "container-fluid text-center">
+        <canvas id = "ctx" width = "500" height = "500" style = "border: 1px solid#000000"></canvas>
+        
+        <div id = "chat-text" style = "display:inline-block;text-align:left; width: 500px;height:100px;overflow-y:scroll">
+            <div>CHAT</div>
+        </div>
+                <div class = "chat">
+            <form id = "chat-form">
+              <input id = "chat-input" type = "text" style = "width:500px"></input>
+            </form>
+        </div>
+      </div>
 
        <script type = "text/javascript">
+        var chatText = document.getElementById('chat-text');
+        var chatInput = document.getElementById('chat-input');
+        var chatForm = document.getElementById('chat-form');
+
         var ctx = document.getElementById("ctx").getContext("2d");
          ctx.font = '5px Arial'; 
 
@@ -18,12 +34,20 @@
          		ctx.clearRect(0,0,500,500);
             for(var i = 0; i < data.length; i++)
             {
-                console.log(data[i].color);
                 ctx.fillStyle= data[i].color;
                 ctx.fillRect(data[i].x ,data[i].y, 10,10);
-                //ctx.fillText(data[i].number, data[i].x, data[i].y);
             }
          });
+
+         socket.on('addToChat', function(data){
+            chatText.innerHTML += '<div>' + data + '</div>';
+         });
+
+         chatForm.onsubmit = function(e){
+            e.preventDefault();
+            socket.emit('sendMsgToServer', chatInput.value);
+            chatInput.value = '';
+         }
 
          document.onkeydown = function(event){
             if(event.keyCode == 68)

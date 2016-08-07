@@ -9,7 +9,7 @@ app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.get('/', function(req,res){
 	res.sendFile(__dirname + '/public/index.html');
 });
-app.use('/client', express.static(__dirname + '/client'));
+app.use('/public', express.static(__dirname + '/public'));
 
 server.listen(PORT, function(){
     console.log("server started on port: " + PORT);
@@ -63,6 +63,12 @@ io.sockets.on('connection', function(socket){
     socket.on('disconnect', function(){
     	delete SOCKET_LIST[socket.id];
     	delete PLAYER_LIST[socket.id];
+    });
+    socket.on('sendMsgToServer', function(data){
+    	var playerName = ("" + socket.id).slice(2,7);
+    	for(var i in SOCKET_LIST){
+    		SOCKET_LIST[i].emit('addToChat',playerName + ': ' + data);
+    	}
     });
 
     socket.on('keyPress', function(data){
