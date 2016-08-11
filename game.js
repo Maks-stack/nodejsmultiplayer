@@ -1,3 +1,5 @@
+var DEBUG = true;
+
 var express = require('express');
 var favicon = require('serve-favicon');
 var app = express();
@@ -24,8 +26,9 @@ var PLAYER_COLORS = [
 	YELLOW = "#fff400",
 	GREEN = "#00ff38"];
 
-var FRICTION = 0.92;
+var FRICTION = 0.8;
 var MAXSPEED = 10;
+var SPEED = 3;
 
 var Player = function(id){
 	var self = {
@@ -41,15 +44,25 @@ var Player = function(id){
 		velX: 0,
 		velY: 0
 	}
+
 	self.updatePosition = function(){
+
 		if(self.pressingRight)
-			self.velX++;
+		{
+			self.velX += SPEED;
+		}
 		if(self.pressingLeft)
-			self.velX --;
+		{
+			self.velX -= SPEED;
+		}
 		if(self.pressingUp)
-			self.velY --;
+		{
+			self.velY -= SPEED;
+		}
 		if(self.pressingDown)
-			self.velY ++;
+		{
+			self.velY +=SPEED;
+		}
 
 		if(self.velX > MAXSPEED)
 			self.velX = MAXSPEED;
@@ -60,7 +73,7 @@ var Player = function(id){
 			self.velY = MAXSPEED;
 		if(self.velY < -MAXSPEED)
 			self.velY = -MAXSPEED;
-
+		
 		self.velX *= FRICTION;
 		self.velY *= FRICTION;
 
@@ -70,37 +83,95 @@ var Player = function(id){
 	return self;
 } 
 
+var USERS = {
+	//username:password
+	"bob":"bob",
+	"bob1":"bob1",
+	"bob2":"bob2",
+}
+var isValidPassword = function(data, cb){
+	setTimeout(function(){
+		cb(USERS[data.username] === data.password); 
+	},10);
+
+}
+
+var isUsernameTaken = function(data,cb){
+	setTimeout(function(){
+		cb(USERS[data.username]);
+	},10);
+}
+var addUser = function(data, cb){
+	setTimeout(function(){
+		USERS[data.username] = data.password;
+		cb();
+	},10);
+}
+
+
 var io = require('socket.io')(server,{});
 
 io.sockets.on('connection', function(socket){
 	socket.id = Math.random();
 	SOCKET_LIST[socket.id] = socket;
-    console.log('socket connection');
 
-    var player = Player(socket.id);
-    PLAYER_LIST[socket.id] = player;
+	socket.on('signIn', function(data){
+		isValidPassword(data, function(res){
+			if(res)
+			{
+			    var player = Player(socket.id);
+		    	PLAYER_LIST[socket.id] = player;
+
+		    	socket.on('keyPress', function(data){
+		    	if(data.inputId === 'left')
+		    		player.pressingLeft = data.state;
+		    	else if(data.inputId === 'right')
+		    		player.pressingRight = data.state;
+		    	else if(data.inputId === 'up')
+		    		player.pressingUp = data.state;
+		    	else if(data.inputId === 'down')
+		    		player.pressingDown = data.state;
+	    	});
+
+		    console.log('socket connection');
+		    socket.emit('signInResponse', {success : true});
+			}else{
+				socket.emit('signInResponse', {success : false});
+			}
+		});
+	});
+
+	socket.on('signUp', function(data){
+
+		isUsernameTaken(data, function(res){
+			if(res)
+			{
+				socket.emit('signUpResponse', {success:false});
+			}else{
+				addUser(data, function(){
+					socket.emit('signUpResponse', {success:true});
+				});
+			}
+		});
+	});
 
     socket.on('disconnect', function(){
     	delete SOCKET_LIST[socket.id];
     	delete PLAYER_LIST[socket.id];
     });
     socket.on('sendMsgToServer', function(data){
-    	var playerName = ("" + socket.id).slice(2,7);
+    	var playerName = ("" + data.playerName);
     	for(var i in SOCKET_LIST){
     		SOCKET_LIST[i].emit('addToChat',playerName + ': ' + data);
     	}
     });
-
-    socket.on('keyPress', function(data){
-    	if(data.inputId === 'left')
-    		player.pressingLeft = data.state;
-    	else if(data.inputId === 'right')
-    		player.pressingRight = data.state;
-    	else if(data.inputId === 'up')
-    		player.pressingUp = data.state;
-    	else if(data.inputId === 'down')
-    		player.pressingDown = data.state;
+    socket.on('evalServer', function(data){
+    	if(!DEBUG)
+    		return;
+    	var res = eval(data);
+    	socket.emit('evalAnswer', res);
     });
+
 });
 
 setInterval(function(){

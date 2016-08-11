@@ -7,29 +7,72 @@
    </HEAD>
    <BODY>
       <div class = "container-fluid text-center">
-      <div id = "debug">DEBUG</div>
+        <div id = "signDiv">
+          Username: <input class = "form-control" id = "signDiv-username" type = "text"></input><br>
+          Password: <input class = "form-control" id = "signDiv-password" type = "password"></input>
+          <button class = "btn btn-primary" id = "signDiv-signIn">Sign In</button>
+          <button class = "btn btn-default" id = "signDiv-signUp">Sign Up</button>
+        </div>
 
-        <canvas id = "ctx" width = "500" height = "500" style = "border: 1px solid#000000"></canvas>
-        <div id = "chat-text" style = "display:block;text-align:left; width: 500px;height:100px;overflow-y:scroll">
-            <div>CHAT</div>
+        <div id = "gameDiv" style = "display:none;">
+          <div id = "debug">DEBUG</div>
+          <canvas id = "ctx" width = "500" height = "500" style = "border: 1px solid#000000"></canvas>
+          <div id = "chat-text" style = "display:block;text-align:left; width: 500px;height:100px;overflow-y:scroll">
+              <div>CHAT</div>
+          </div>
+          <div class = "chat">
+              <form id = "chat-form">
+                <input id = "chat-input" type = "text" style = "width:500px"></input>
+              </form>
+          </div>
         </div>
-        <div class = "chat">
-            <form id = "chat-form">
-              <input id = "chat-input" type = "text" style = "width:500px"></input>
-            </form>
-        </div>
+
       </div>
 
        <script type = "text/javascript">
+
+        var socket = io();
+
+        //sign in
+        var signDiv = document.getElementById('signDiv');
+        var signDivUsername = document.getElementById('signDiv-username');
+        var signDivSignIn = document.getElementById('signDiv-signIn');
+        var signDivSignUp = document.getElementById('signDiv-signUp');
+        var signDivPassword = document.getElementById('signDiv-password');
+
+        signDivSignIn.onclick = function(){
+          socket.emit('signIn', {username: signDivUsername.value, password:signDivPassword.value});
+        }
+
+        signDivSignUp.onclick = function(){
+          socket.emit('signUp', {username: signDivUsername.value, password:signDivPassword.value});
+        }
+
+        socket.on('signInResponse', function(data){
+          if(data.success){
+            signDiv.style.display = "none";
+            gameDiv.style.display = 'inline-block';
+          }else{
+            alert("sign in was unsuccessflu blablabla");
+          }
+        });
+
+        socket.on('signUpResponse', function(data){
+          if(data.success){
+            alert("sign Up Successful");
+          }else{
+            alert("sign up not successful");
+          }
+        });
+
+        //game
         var chatText = document.getElementById('chat-text');
         var chatInput = document.getElementById('chat-input');
         var chatForm = document.getElementById('chat-form');
         var debug = document.getElementById('debug');
 
         var ctx = document.getElementById("ctx").getContext("2d");
-         ctx.font = '5px Arial'; 
-
-         var socket = io();
+         ctx.font = '5px Arial';          
 
          socket.on('newPositions', function(data){
          		ctx.clearRect(0,0,500,500);
@@ -37,7 +80,7 @@
             {
                 ctx.fillStyle= data[i].color;
                 ctx.fillRect(data[i].x ,data[i].y, 10,10);
-                debug.innerHTML = i;
+                debug.innerHTML = data[i].velX + " " + data[i].velY;
             }
          });
 
@@ -45,9 +88,18 @@
             chatText.innerHTML += '<div>' + data + '</div>';
          });
 
+         socket.on('evalAnswer', function(data){
+            console.log(data);
+         });
+
+
          chatForm.onsubmit = function(e){
             e.preventDefault();
-            socket.emit('sendMsgToServer', chatInput.value);
+            if(chatInput.value[0] === '/')
+              socket.emit('evalServer', chatInput.value.slice(1))
+            else
+              socket.emit('sendMsgToServer', chatInput.value);
+
             chatInput.value = '';
          }
 
