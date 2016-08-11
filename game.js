@@ -85,9 +85,10 @@ var Player = function(id){
 
 var USERS = {
 	//username:password
-	"bob":"bob",
-	"bob1":"bob1",
-	"bob2":"bob2",
+	"max":"max",
+	"max1":"max1",
+	"max2":"max2",
+	"max3":"max3",
 }
 var isValidPassword = function(data, cb){
 	setTimeout(function(){
