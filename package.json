@@ -10,15 +10,4 @@
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Maksmaksmakz/nodejsmultiplayer.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Maksmaksmakz/nodejsmultiplayer/issues"
-  },
-  "homepage": "https://github.com/Maksmaksmakz/nodejsmultiplayer#readme",
-  "description": ""
 }
